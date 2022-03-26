@@ -46,10 +46,21 @@ async function updateGig(req, res) {
         res.status(500).send({ err: 'Failed to update gig' })
     }
 }
+async function add(req, res) {
+    try {
+      const gig = req.body
+      const addedGig = await gigService.add(gig)
+      res.json(addedGig)
+    } catch (err) {
+      logger.error('Failed to add gig', err)
+      res.status(500).send({ err: 'Failed to add gig' })
+    }
+  }
 
 module.exports = {
     getGig,
     getGigs,
     deleteGig,
-    updateGig
+    updateGig,
+    add,
 }
