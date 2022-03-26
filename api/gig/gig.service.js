@@ -74,16 +74,17 @@ async function remove(gigId) {
 
 async function update(gig) {
     try {
+        console.log(gig);
         // peek only updatable fields!
-        const gigToSave = {
-            _id: ObjectId(gig._id), // needed for the returnd obj
-            gigname: gig.gigname,
-            fullname: gig.fullname,
-            score: gig.score,
-        }
+        // const gigToSave = {
+        //     _id: ObjectId(gig._id), // needed for the returnd obj
+        //     gigname: gig.gigname,
+        //     fullname: gig.fullname,
+        //     score: gig.score,
+        // }
         const collection = await dbService.getCollection('gig')
-        await collection.updateOne({ _id: gigToSave._id }, { $set: gigToSave })
-        return gigToSave;
+        await collection.updateOne({ _id: gig._id }, { $set: gig })
+        return gig;
     } catch (err) {
         logger.error(`cannot update gig ${gig._id}`, err)
         throw err
@@ -93,15 +94,15 @@ async function update(gig) {
 async function add(gig) {
     try {
         // peek only updatable fields!
-        const gigToAdd = {
-            gigname: gig.gigname,
-            password: gig.password,
-            fullname: gig.fullname,
-            score: 100
-        }
+        // const gigToAdd = {
+        //     gigname: gig.gigname,
+        //     password: gig.password,
+        //     fullname: gig.fullname,
+        //     score: 100
+        // }
         const collection = await dbService.getCollection('gig')
-        await collection.insertOne(gigToAdd)
-        return gigToAdd
+        await collection.insertOne(gig)
+        return gig
     } catch (err) {
         logger.error('cannot insert gig', err)
         throw err
