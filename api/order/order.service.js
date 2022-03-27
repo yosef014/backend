@@ -103,6 +103,7 @@ async function add(order) {
       buyer: order.buyer,
       seller: order.seller,
       gig: order.gig,
+      status:order.status,
     };
     const collection = await dbService.getCollection("order");
     await collection.insertOne(orderToAdd);
