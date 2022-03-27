@@ -81,10 +81,10 @@ async function update(order) {
      
     };
     const orderId = ObjectId(order._id)
-        delete order._id
+        order._id = ObjectId(order._id)
     const collection = await dbService.getCollection("order");
-    await collection.updateOne({ _id: orderId }, { $set: {...orderToSave} });
-    return orderToSave;
+    await collection.updateOne({ _id: order._id }, { $set: {...order} });
+    return order;
   } catch (err) {
     logger.error(`cannot update order ${order._id}`, err);
     throw err;
