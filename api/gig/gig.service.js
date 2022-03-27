@@ -1,4 +1,5 @@
 
+const { log } = require('../../middlewares/logger.middleware')
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const reviewService = require('../review/review.service')
@@ -75,15 +76,18 @@ async function remove(gigId) {
 async function update(gig) {
     try {
         // peek only updatable fields!
-        const gigToSave = {
-            _id: ObjectId(gig._id), // needed for the returnd obj
-            gigname: gig.gigname,
-            fullname: gig.fullname,
-            score: gig.score,
-        }
+        // const gigToSave = {
+        //     _id: ObjectId(gig._id), // needed for the returnd obj
+        //     gigname: gig.gigname,
+        //     fullname: gig.fullname,
+        //     score: gig.score,
+        // }
+        const gigId = ObjectId(gig._id)
+        delete gig._id
+        // console.log(gig);
         const collection = await dbService.getCollection('gig')
-        await collection.updateOne({ _id: gigToSave._id }, { $set: gigToSave })
-        return gigToSave;
+        await collection.updateOne({ _id: gigId }, { $set: {...gig} })
+        return gig;
     } catch (err) {
         logger.error(`cannot update gig ${gig._id}`, err)
         throw err
@@ -93,15 +97,15 @@ async function update(gig) {
 async function add(gig) {
     try {
         // peek only updatable fields!
-        const gigToAdd = {
-            gigname: gig.gigname,
-            password: gig.password,
-            fullname: gig.fullname,
-            score: 100
-        }
+        // const gigToAdd = {
+        //     gigname: gig.gigname,
+        //     password: gig.password,
+        //     fullname: gig.fullname,
+        //     score: 100
+        // }
         const collection = await dbService.getCollection('gig')
-        await collection.insertOne(gigToAdd)
-        return gigToAdd
+        await collection.insertOne(gig)
+        return gig
     } catch (err) {
         logger.error('cannot insert gig', err)
         throw err
