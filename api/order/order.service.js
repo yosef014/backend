@@ -96,8 +96,11 @@ async function add(order) {
     console.log(order);
     // peek only updatable fields!
     const orderToAdd = {
-      byUserId: ObjectId(order.byUserId),
-      buyer: order.buyer._id,
+      createdAt:order.createdAt,
+      imgUrl:order.imgUrl,
+      description:order.description,
+      title:order.title,
+      buyer: order.buyer,
       seller: order.seller,
       gig: order.gig,
     };
