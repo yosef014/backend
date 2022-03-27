@@ -77,13 +77,13 @@ async function update(order) {
   try {
     // peek only updatable fields!
     const orderToSave = {
-      _id: ObjectId(order._id), // needed for the returnd obj
-      ordername: order.ordername,
-      fullname: order.fullname,
-      score: order.score,
+      // _id: ObjectId(order._id), // needed for the returnd obj
+     
     };
+    const orderId = ObjectId(order._id)
+        delete order._id
     const collection = await dbService.getCollection("order");
-    await collection.updateOne({ _id: orderToSave._id }, { $set: orderToSave });
+    await collection.updateOne({ _id: orderId }, { $set: {...orderToSave} });
     return orderToSave;
   } catch (err) {
     logger.error(`cannot update order ${order._id}`, err);
