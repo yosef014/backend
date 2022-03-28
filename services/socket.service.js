@@ -1,3 +1,4 @@
+const { emit } = require('nodemon');
 const asyncLocalStorage = require('./als.service');
 const logger = require('./logger.service');
 
@@ -23,11 +24,18 @@ function connectSockets(http, session) {
             socket.myTopic = topic
         })
         socket.on('chat newMsg', msg => {
-            console.log('Emitting Chat msg', msg);
-            // emits to all sockets:
-            // gIo.emit('chat addMsg', msg)
-            // emits only to sockets in the same room
-            gIo.to(socket.myTopic).emit('chat addMsg', msg)
+            chatToUser({data: msg, userId: '623d16828fc7fd17d4b7bac2' })
+            // socket.broadcast.to(socket.myTopic).emit('chat addMsg', msg)
+
+        })
+        socket.on('chat typing', ({ username, isDoneTyping = false }) => {
+            console.log('broadcasting chat typing');
+            broadcast({ type: 'chat userTyping', data: { username, isDoneTyping }, room: socket.myTopic, userId: socket.userId })
+        })
+        socket.on('chat typing', ({ username, isDoneTyping = false }) => {
+            console.log('isDoneTyping', isDoneTyping);
+            socket.broadcast.to(socket.myTopic).emit('chat test', { username, isDoneTyping })
+
         })
         socket.on('user-watch', userId => {
             socket.join('watching:' + userId)
@@ -47,8 +55,24 @@ function emitTo({ type, data, label }) {
     if (label) gIo.to('watching:' + label).emit(type, data)
     else gIo.emit(type, data)
 }
+async function chatToUser({ data, userId }){
+    const socket = await _getUserSocket(userId)
+    if (socket){
+        socket.myTopic = userId
+        console.log('mehubarrrrrrrrrrrrr');
+        socket.broadcast.to(socket.myTopic).emit('chat addMsg', data)
+    }else{
+        console.log('lo mehubarrrrrrrrrrrrr');
+        emitToUser({ type:'chat newMsgNotefication', data:data, userId: userId })
 
-async function emitToUser({ type, data, userId }) {
+
+    }
+
+    
+
+ }
+
+async function emitToUser({ type, data, userId: userId }) {
     logger.debug('Emiting to user socket: ' + userId)
     const socket = await _getUserSocket(userId)
     if (socket) socket.emit(type, data)
@@ -63,8 +87,7 @@ async function broadcast({ type, data, room = null, userId }) {
     console.log('BROADCASTING', JSON.stringify(arguments));
     const excludedSocket = await _getUserSocket(userId)
     if (!excludedSocket) {
-        // logger.debug('Shouldnt happen, socket not found')
-        // _printSockets();
+
         return;
     }
     logger.debug('broadcast to all but user: ', userId)
@@ -81,7 +104,6 @@ async function _getUserSocket(userId) {
     return socket;
 }
 async function _getAllSockets() {
-    // return all Socket instances
     const sockets = await gIo.fetchSockets();
     return sockets;
 }
