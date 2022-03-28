@@ -25,7 +25,8 @@ function connectSockets(http, session) {
         socket.on('chat newMsg', msg => {
             console.log('Emitting Chat msg', msg);
             // emits to all sockets:
-            gIo.emit('chat addMsg', msg)
+            // gIo.emit('chat addMsg', msg)
+            emitToUser({ type: 'chat getMsg', data:msg, userId:msg.to })
             // emits only to sockets in the same room
             // gIo.to(socket.myTopic).emit('chat addMsg', msg)
         })
