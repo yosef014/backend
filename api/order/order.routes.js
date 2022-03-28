@@ -20,8 +20,8 @@ router.get("/:id", getOrder);
 router.put("/:id", updateOrder);
 // router.put("/:id", requireAuth, updateOrder);
 // router.post("/", updateOrder);
-router.post("/", requireAuth, addOrder);
-// router.post("/", addOrder);
+// router.post("/", requireAuth, addOrder);
+router.post("/", addOrder);
 
 // router.put('/:id',  requireAuth, updateOrder)
 router.delete("/:id", requireAuth, requireAdmin, deleteOrder);
