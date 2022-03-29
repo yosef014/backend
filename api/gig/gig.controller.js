@@ -38,7 +38,8 @@ function _filterGigs(gigsBeforeFilter, filterBy) {
   
     //filter by inStock
     if (filterBy.price) {
-        filteredGigs = filteredGigs.filter((gig) => (gig.price> filterBy.price[0] && gig.price<filterBy.price[1]))
+        // filteredGigs = filteredGigs.filter((gig) => (gig.price> filterBy.price[0] && gig.price<filterBy.price[1]))
+        filteredGigs = filteredGigs.filter((gig) => ( filterBy.price >= gig.price))
     }
   
     //filter by labels
