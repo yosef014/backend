@@ -5,15 +5,11 @@ const router = express.Router()
 
 // middleware that is specific to this router
 // router.use(requireAuth)
-
 router.get('/', getGigs)
 router.get('/:id', getGig)
-router.put('/:id',   updateGig)
-// router.put('/:id', requireAuth,  updateGig)
+router.put('/:id', requireAuth,  updateGig)
 // router.post('/', requireAuth, requireAdmin, addToy)
-router.post('/', add)
-
-
+router.post('/',requireAuth, add)
 // router.put('/:id',  requireAuth, updateGig)
 router.delete('/:id',  requireAuth, requireAdmin, deleteGig)
 

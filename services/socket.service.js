@@ -26,7 +26,10 @@ function connectSockets(http, session) {
         socket.on('newOrderAded', ownerUser => {
              gIo.emit('Notefication orderAdded', ownerUser)
             emitToUser({ type:'Notefication orderAdded', data:'', userId: ownerUser._id })
-
+        })
+        socket.on('statusChanged', order => {
+            emitToUser({ type:'Notefication statusChanged', data:'', userId: order.buyer._id })
+            //  gIo.emit('Notefication statusChanged' , order.status)
         })
         socket.on('chat newMsg', msg => {
             chatToUser({data: msg, userId: '623d16828fc7fd17d4b7bac2' })
@@ -80,7 +83,9 @@ async function chatToUser({ data, userId }){
 async function emitToUser({ type, data, userId }) {
     logger.debug('Emiting to user socket: ' + userId)
     const socket = await _getUserSocket(userId)
+    console.log("typeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",type);
     if (socket) {
+       console.log('ggggggggg',userId);
         socket.emit(type, data)}
     else {
         console.log('User socket not found');
