@@ -19,6 +19,7 @@ async function getGigs(req, res) {
             seller: req.query?.seller || '',
             price: req.query?.price || '',
             sortBy: req.query?.sortBy || '',
+            level: req.query?.level || false,
         }
         const gigsBeforeFilter = await gigService.query(filterBy)
         let gigs = _filterGigs(gigsBeforeFilter, filterBy)
@@ -60,7 +61,10 @@ function _filterGigs(gigsBeforeFilter, filterBy) {
           return tg.title.toLowerCase() > g2.title.toLowerCase() ? 1 : -1;
         });
     }
-  
+    console.log(filterBy);
+    if(filterBy.level === 'true'){
+        filteredGigs =  filteredGigs.filter((gig)=> gig.level === "Level 3 Seller") 
+    } else return gigs
     // if(filterBy.page){
     //     startIdx = filterBy.page * PAGE_SIZE
     //     cars = cars.slice(startIdx, startIdx + PAGE_SIZE)
