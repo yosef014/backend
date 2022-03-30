@@ -19,6 +19,7 @@ async function getGigs(req, res) {
             seller: req.query?.seller || '',
             price: req.query?.price || '',
             sortBy: req.query?.sortBy || '',
+            level: req.query?.level || false,
         }
         const gigsBeforeFilter = await gigService.query(filterBy)
         let gigs = _filterGigs(gigsBeforeFilter, filterBy)
@@ -52,7 +53,7 @@ function _filterGigs(gigsBeforeFilter, filterBy) {
     //sorting
     if (filterBy.sortBy) {
       if (filterBy.sortBy === 'rate')
-      filteredGigs = filteredGigs.sort((g1, g2) => g1.rate - g2.rate);
+      filteredGigs = filteredGigs.sort((g1, g2) => g2.rate - g1.rate);
       else if (filterBy.sortBy === 'Price')
       filteredGigs = filteredGigs.sort((g1, g2) => g1.price - g2.price);
       else if (filterBy.sortBy === 'Name')
@@ -60,7 +61,9 @@ function _filterGigs(gigsBeforeFilter, filterBy) {
           return tg.title.toLowerCase() > g2.title.toLowerCase() ? 1 : -1;
         });
     }
-  
+    if(filterBy.level === 'true'){
+        filteredGigs =  filteredGigs.filter((gig)=> gig.level === "level 3 seller") 
+    } 
     // if(filterBy.page){
     //     startIdx = filterBy.page * PAGE_SIZE
     //     cars = cars.slice(startIdx, startIdx + PAGE_SIZE)
