@@ -62,7 +62,7 @@ function _filterGigs(gigsBeforeFilter, filterBy) {
         });
     }
     if(filterBy.level === 'true'){
-        filteredGigs =  filteredGigs.filter((gig)=> gig.level === "Level 3 Seller") 
+        filteredGigs =  filteredGigs.filter((gig)=> gig.level === "level 3 seller") 
     } 
     // if(filterBy.page){
     //     startIdx = filterBy.page * PAGE_SIZE
