@@ -24,16 +24,16 @@ function connectSockets(http, session) {
             socket.myTopic = topic
         })
         socket.on('newOrderAded', ownerUser => {
-             gIo.emit('Notefication orderAdded', ownerUser)
+            //  gIo.emit('Notefication orderAdded', ownerUser)
             emitToUser({ type:'Notefication orderAdded', data:'', userId: ownerUser._id })
         })
         socket.on('statusChanged', order => {
-            emitToUser({ type:'Notefication statusChanged', data:'', userId: order.buyer._id })
-            //  gIo.emit('Notefication statusChanged' , order.status)
+            // gIo.emit('Notefication statusChanged' , order.status)
+            emitToUser({ type:'Notefication statusChanged', data:'yosef', userId: order.buyer._id })
         })
         socket.on('chat newMsg', msg => {
-            chatToUser({data: msg, userId: '623d16828fc7fd17d4b7bac2' })
-            // socket.broadcast.to(socket.myTopic).emit('chat addMsg', msg)
+            // chatToUser({data: msg, userId: '623d16828fc7fd17d4b7bac2' })
+            socket.broadcast.to(socket.myTopic).emit('chat addMsg', msg)
 
         })
         socket.on('chat typing', ({ username, isDoneTyping = false }) => {
@@ -86,7 +86,7 @@ async function emitToUser({ type, data, userId }) {
     console.log("typeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",type);
     if (socket) {
        console.log('ggggggggg',userId);
-        socket.emit(type, data)}
+        socket.broadcasts.emit(type, data)}
     else {
         console.log('User socket not found');
         _printSockets();
@@ -112,6 +112,7 @@ async function broadcast({ type, data, room = null, userId }) {
 async function _getUserSocket(userId) {
     const sockets = await _getAllSockets();
     const socket = sockets.find(s => s.userId == userId)
+console.log({socket,sockets});
     return socket;
 }
 async function _getAllSockets() {
