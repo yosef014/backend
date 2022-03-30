@@ -53,7 +53,7 @@ function _filterGigs(gigsBeforeFilter, filterBy) {
     //sorting
     if (filterBy.sortBy) {
       if (filterBy.sortBy === 'rate')
-      filteredGigs = filteredGigs.sort((g1, g2) => g1.rate - g2.rate);
+      filteredGigs = filteredGigs.sort((g1, g2) => g2.rate - g1.rate);
       else if (filterBy.sortBy === 'Price')
       filteredGigs = filteredGigs.sort((g1, g2) => g1.price - g2.price);
       else if (filterBy.sortBy === 'Name')
