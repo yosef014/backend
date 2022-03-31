@@ -37,7 +37,7 @@ function _filterGigs(gigsBeforeFilter, filterBy) {
     const regex = new RegExp(filterBy.seller, 'i')
     filteredGigs = gigs.filter((gig) => regex.test(gig.owner.username))
   
-    //filter by inStock
+    //filter by price
     if (filterBy.price) {
         // filteredGigs = filteredGigs.filter((gig) => (gig.price> filterBy.price[0] && gig.price<filterBy.price[1]))
         filteredGigs = filteredGigs.filter((gig) => ( filterBy.price >= gig.price))

@@ -106,7 +106,7 @@ async function add(order) {
       status:order.status,
     };
     const collection = await dbService.getCollection("order");
-    await collection.insertOne(orderToAdd);
+    await collection.insertOne(orderToAdd ) ;
     return orderToAdd;
   } catch (err) {
     logger.error("cannot insert order", err);

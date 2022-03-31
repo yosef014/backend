@@ -16,6 +16,7 @@ async function getOrders(req, res) {
   try {
     let orders = await orderService.query();
     // orders = orders.filter((order) => order.seller?._id == req.session.user._id)
+    orders.reverse()
     res.send(orders);
   } catch (err) {
     logger.error("Failed to get orders", err);
